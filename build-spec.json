@@ -1,0 +1,29 @@
+{
+    "app_name": "app_name or svc_name",
+    "build_type": "mvn or npm",
+    "deployment_type": "aws-ecs or ec2",
+    "build_path": ".",
+    "build_command": "./build.sh",
+    "deploy_path":".",
+    "deploy_command": "./deploy.sh",
+    "deploy_env":{
+        "SIT": "SIT-A or SIT-B",
+        "UAT": "UAT-A or UAT-B",
+        "PRE_PROD": "PRE-PROD",
+        "PROD": "PROD-A & PROD-B"
+    },
+    "retro_env":{
+        "SIT": "SIT-A or SIT-B",
+        "UAT": "UAT-A or UAT-B"
+    },
+    "healthcheck_deployment":{
+        "SIT": "SIT-A or SIT-B",
+        "UAT": "UAT-A or UAT-B",
+        "PRE_PROD": "PRE-PROD",
+        "PROD": "PROD-A & PROD-B"
+    },
+    "healthcheck_retro":{
+        "SIT": "SIT-A or SIT-B",
+        "UAT": "UAT-A or UAT-B"
+    }
+}
