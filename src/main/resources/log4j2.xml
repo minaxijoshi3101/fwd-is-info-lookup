@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="1">
+	<Properties>
+		<property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %c{1.}.%M[LineNo: %L] [%t] %m%n</property>
+		<property name="APP_LOG_ROOT">${bundle:application:log.file.location}</property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>        
+        <RollingFile name="FileAppenderLog" fileName="${APP_LOG_ROOT}/application.log"
+				filePattern="${APP_LOG_ROOT}/application-%d{yyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="25" />
+		</RollingFile>
+		<RollingFile name="FileAppenderErrorLog" fileName="${APP_LOG_ROOT}/application-error.log"
+				filePattern="${APP_LOG_ROOT}/application-error-%d{yyy-MM-dd}-%i.log">
+			<LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+			<PatternLayout>
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="25" />
+		</RollingFile>
+		<RollingFile name="metrics" fileName="${APP_LOG_ROOT}/application-metrics.log"
+				filePattern="${APP_LOG_ROOT}/application-metrics-%d{yyy-MM-dd}-%i.log">
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="25" />
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="io.micrometer.core" additivity="false" level="info">
+			<AppenderRef ref="metrics" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="org.hibernate.SQL" additivity="false" level="debug">
+			<AppenderRef ref="FileAppenderLog" />
+			<AppenderRef ref="FileAppenderErrorLog" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="org.hibernate.type.descriptor.sql.BasicBinder" additivity="false" level="trace">
+			<AppenderRef ref="FileAppenderLog" />
+			<AppenderRef ref="FileAppenderErrorLog" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Root level="info">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="FileAppenderLog" />
+			<AppenderRef ref="FileAppenderErrorLog" />
+		</Root>
+	</Loggers>
+</Configuration>
