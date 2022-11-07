@@ -1,0 +1,43 @@
+{
+    "family": "%APP_NAME%", 
+    "networkMode": "awsvpc", 
+    "containerDefinitions": [
+        {
+            "name": "%APP_NAME%", 
+            "image": "%SHARED_SVCS_ACCOUNT_ID%.dkr.ecr.ap-southeast-1.amazonaws.com/%APP_NAME%:%VERSION%", 
+            "environment": [
+                {
+                    "name": "WORDPRESS_BASE_URL",
+                    "value": "%WP_BASE_URL%"
+                },
+                {
+                    "name": "IS_BASE_URL",
+                    "value": "%I_BASE_URL%"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "%APP_NAME%-container",
+                    "awslogs-region": "ap-southeast-1",
+                    "awslogs-create-group": "true",
+                    "awslogs-stream-prefix": "%APP_NAME%"
+                }
+            },
+            "portMappings": [
+                {
+                    "containerPort": %CONTAINER_PORT%, 
+                    "hostPort": %HOST_PORT%, 
+                    "protocol": "tcp"
+                }
+            ], 
+            "essential": true
+        }
+    ], 
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "executionRoleArn": "arn:aws:iam::%ACCOUNT_ID%:role/ecsTaskExecutionRole", 
+    "cpu": "2048", 
+    "memory": "4096"
+}
