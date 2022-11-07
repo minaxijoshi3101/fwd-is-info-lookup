@@ -31,6 +31,20 @@
                     "protocol": "tcp"
                 }
             ], 
+            "environment": [
+                {
+                  "name": "AWS_SECRET_MANAGER_ENABLED",
+                  "value": "%AWS_SECRET_MANAGER_ENABLED%"
+                },
+                {
+                    "name": "AWS_SECRET_MANAGER_ARN",
+                    "value": "%AWS_SECRET_MANAGER_ARN%"
+                },
+                {
+                    "name": "AWS_SECRET_MANAGER_REGION",
+                    "value": "ap-southeast-1"
+                }
+              ], 
             "essential": true
         }
     ], 
