@@ -1,11 +1,12 @@
-FROM tomcat:8.5.69-jdk8-openjdk
-WORKDIR /usr/local/tomcat
-COPY target/fwd-is-customerprofile.war /usr/local/tomcat/webapps
-RUN cp /usr/local/tomcat/webapps/fwd-is-customerprofile.war /usr/local/tomcat/webapps/ROOT.war
-RUN mkdir /APPCONF
-COPY properties/%ENVIRONMENT%/common.properties /APPCONF/
-ENV CONFIG_DIR=/APPCONF/
-EXPOSE 8080
+
+FROM openjdk:11.0.11-jre-slim
+#COPY instruction is to copy the files or directories from source to destination
+COPY target/%APP_NAME%-%VERSION%.jar .
+# RUN instruction runs the commads written
+RUN mkdir -p /home/localfiles
+RUN ["chmod", "+x", "/usr/local/openjdk-11"]
+#CMD chmod -R 755 /usr/local/openjdk-11
 USER root
-CMD chmod +x /usr/local/tomcat/bin/catalina.sh
-CMD ["catalina.sh", "run"]
+CMD java -Xmx400m -Xms400m -jar %APP_NAME%-%VERSION%.jar
+# which port will be used , for example in server.xml connector port is 8085
+EXPOSE 5002
