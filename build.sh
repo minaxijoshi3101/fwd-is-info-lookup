@@ -9,14 +9,14 @@ echo "appnam and versions are: " $app_name "   "$version
 profile=non_prod_ecr_role
 account_id=$2
 #touch .env
-PARAMETER_STORE_ENV=$(echo $1 | tr '[:lower:]' '[:upper:]')
-temp_arr=$(aws ssm get-parameter --name "$1-$app_name" --profile $PARAMETER_STORE_ENV-SG-IS | jq -r .Parameter.Value)
+#PARAMETER_STORE_ENV=$(echo $1 | tr '[:lower:]' '[:upper:]')
+#temp_arr=$(aws ssm get-parameter --name "$1-$app_name" --profile $PARAMETER_STORE_ENV-SG-IS | jq -r .Parameter.Value)
 
-IFS=','     # comma is set as delimiter
-read -ra ADDR <<< "$temp_arr"   # str is read into an array as tokens separated by IFS
-for i in "${ADDR[@]}"; do   # access each element of array
-    echo "$i" >> .env
-done
+#IFS=','     # comma is set as delimiter
+#read -ra ADDR <<< "$temp_arr"   # str is read into an array as tokens separated by IFS
+#for i in "${ADDR[@]}"; do   # access each element of array
+#    echo "$i" >> .env
+#done
 
 #cat .env | tr -d " " >> env.properties
 
