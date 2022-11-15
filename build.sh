@@ -1,9 +1,11 @@
 #! /bin/bash
 source ~/.bash_profile
-nvm use v16.15.0
-npm install --loglevel=error
-app_name=$(jq -r '.name' package.json)
-version=$(jq -r '.version' package.json)
+export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain fwd-sg --domain-owner 612556329065 --region ap-southeast-1 --query authorizationToken --output text`
+mvn clean package -Dmaven.test.skip=true -DrepositoryId=fwd-sg-maven-group
+#mvn deploy -DrepositoryId=fwd-sg-maven-group
+app_name=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="artifactId"]/text()' pom.xml)
+version=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml)
+echo "appnam and versions are: " $app_name "   "$version
 profile=non_prod_ecr_role
 account_id=$2
 #touch .env

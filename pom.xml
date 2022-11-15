@@ -115,4 +115,11 @@
 			</properties>
 		</profile>
 	</profiles>
+	<distributionManagement>
+	<repository>
+		<id>fwd-sg-maven-group</id>
+		<name>fwd-sg-maven-group</name>
+		<url>https://fwd-sg-612556329065.d.codeartifact.ap-southeast-1.amazonaws.com/maven/maven-group/</url>
+	</repository>
+  </distributionManagement>
 </project>

@@ -1,6 +1,6 @@
 {
     "app_name": "fwd-is-info-lookup",
-    "build_type": "npm",
+    "build_type": "mvn",
     "deployment_type": "aws-ecs",
     "build_path": ".",
     "build_command": "./build.sh",

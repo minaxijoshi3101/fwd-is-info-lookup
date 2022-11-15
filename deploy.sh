@@ -1,7 +1,7 @@
 #To-do deployment instructions
 #! /bin/bash
-app_name=$(jq -r '.name' package.json)
-version=$(jq -r '.version' package.json)
+app_name=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="artifactId"]/text()' pom.xml)
+version=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml)
 profile=$1-SG-IS
 cluster_name=$profile
 account_id=$2
@@ -43,5 +43,5 @@ sed -i "s;%AWS_SECRET_MANAGER_ARN%;$AWS_SECRET_MANAGER_ARN;g" app-task-definitio
 # COMMANDS to register task definitions 
 aws ecs register-task-definition --cli-input-json --profile $profile file://app-task-definition.json
 
-aws ecs create-service --cluster $cluster_name --service-name $app_name --task-definition $app_name --load-balancers targetGroupArn=$targetGroupARN,containerName=$app_name,containerPort=8080 --desired-count 1 --launch-type "FARGATE" --network-configuration $networkConfig --profile $profile | error=true
+aws ecs create-service --cluster $cluster_name --service-name $app_name --task-definition $app_name --load-balancers targetGroupArn=$targetGroupARN,containerName=$app_name,containerPort=5002 --desired-count 1 --launch-type "FARGATE" --network-configuration "$networkConfig" --profile $profile | error=true
 aws ecs update-service --cluster $cluster_name --service $app_name --task-definition $app_name --desired-count 1 --profile $profile
