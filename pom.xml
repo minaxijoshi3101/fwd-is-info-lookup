@@ -11,6 +11,7 @@
 	</parent>
 	<artifactId>fwd-is-info-lookup</artifactId>
 	<name>fwd-is-info-lookup</name>
+	<version>0.0.1-SNAPSHOT</version>
 	<description>FWD Integration Service Info Lookup</description>
 	<dependencies>
 		<dependency>
