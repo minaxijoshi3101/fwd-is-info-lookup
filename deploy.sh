@@ -11,6 +11,9 @@ if [[ "$1" == "SIT" ]]; then
     networkConfig="awsvpcConfiguration={subnets=[subnet-000afa848a09d7893,subnet-00a7d691241b6fb66],securityGroups=[sg-0fb000da57a1a0e9a]}"
     AWS_SECRET_MANAGER_ENABLED=true
     AWS_SECRET_MANAGER_ARN=arn:aws:secretsmanager:ap-southeast-1:165901213126:secret:sit-fwd-is-info-lookup-M60r5f
+    else
+    echo "Wrong Environment"
+    fi
     PARAMETER_STORE_ENV=$(echo $1 | tr '[:upper:]' '[:lower:]')
     temp_arr=$(aws ssm get-parameter --name "$PARAMETER_STORE_ENV-$app_name" --profile $1-SG-IS | jq -r .Parameter.Value)
     IFS=','     # comma is set as delimiter
@@ -18,9 +21,7 @@ if [[ "$1" == "SIT" ]]; then
     for i in "${ADDR[@]}"; do   # access each element of array
         echo "$i" >> .env
     done
-else
-    echo "Wrong Environment"
-fi
+
 cat .env | tr -d " " >> env.properties
 
 file="./env.properties"

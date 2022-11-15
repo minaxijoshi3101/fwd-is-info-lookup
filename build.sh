@@ -30,7 +30,8 @@ done
 #sed -i "s;%WP_BASE_URL%;$WORDPRESS_BASE_URL;g" app-task-definition.json
 #sed -i "s;%I_BASE_URL%;$IS_BASE_URL;g" app-task-definition.json
 #sed -i "s;%SALES_PATH%;$CI_SALES_JOURNEY_PATH;g" app-task-definition.json
-
+sed -i "s;%APP_NAME%;$app_name;g" Dockerfile
+sed -i "s;%VERSION%;$version;g" Dockerfile
 
 docker build -t $app_name:$version .
 aws ecr get-login-password --region ap-southeast-1 --profile  $profile | docker login --username AWS --password-stdin $account_id.dkr.ecr.ap-southeast-1.amazonaws.com
