@@ -22,7 +22,10 @@ elif [[ "$1" == "PRE-PROD" ]]; then
     AWS_SECRET_MANAGER_ENABLED=true
     AWS_SECRET_MANAGER_ARN=arn:aws:secretsmanager:ap-southeast-1:230108722688:secret:pre-prod-fwd-is-info-lookup-LuN0uX
 elif [[ "$1" == "PROD" ]]; then
-    echo "No resources for PROD now, pending creation" 
+    targetGroupARN=arn:aws:elasticloadbalancing:ap-southeast-1:407264846976:targetgroup/fwd-is-info-lookup/d177a79ba7321025
+    networkConfig='awsvpcConfiguration={subnets=[subnet-0a76aa27cf1c3b14f,subnet-0e621bfb0281f241e],securityGroups=[sg-09b09570e27b17ed6]}'
+    AWS_SECRET_MANAGER_ENABLED=true
+    AWS_SECRET_MANAGER_ARN=arn:aws:secretsmanager:ap-southeast-1:407264846976:secret:prod-fwd-is-info-lookup-G3C4Zw  
     else
     echo "Wrong Environment"
     fi
