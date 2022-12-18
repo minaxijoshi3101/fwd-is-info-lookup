@@ -1,0 +1,50 @@
+{
+	"policyId": "",
+	"tuhsExpense": 0,
+	"details": {
+		"policyholder": {
+			"name": "",
+			"preferredName": "",
+			"email": "",
+			"idNumber": "",
+			"dob": "",
+			"mobile": "",
+			"postalCode": "",
+			"blockNo": "",
+			"streetName": "",
+			"unitNo": "",
+			"buildingName": "",
+			"gender": ""
+		},
+		"insured": [
+			{
+				"name": "",
+				"dob": "",
+				"workPermitNo": "",
+				"country": "",
+				"sbTransmissionNo": "",
+				"passNo": "",
+				"workPermitTyp": ""
+			}
+		]
+	},
+	"factors": {
+		"effectiveDate": "",
+		"periodOfCover": "",
+		"expiryDate": ""
+	},
+	"others": {
+		"subChannel": 3,
+		"utmSource": "",
+		"utmMedium": "",
+		"utmContent": "",
+		"utmCampaign": "",
+		"utmTerm": "",
+		"consentMail": "Y",
+		"consentSMS": "Y",
+		"consentTele": "Y",
+		"partnerTxId": ""
+	},
+	"discount": {},
+	"policyPlan": null
+}

@@ -11,7 +11,6 @@
 	</parent>
 	<artifactId>fwd-is-info-lookup</artifactId>
 	<name>fwd-is-info-lookup</name>
-	<version>0.0.1-SNAPSHOT</version>
 	<description>FWD Integration Service Info Lookup</description>
 	<dependencies>
 		<dependency>
@@ -30,7 +29,7 @@
 					<includeSystemScope>true</includeSystemScope>
 				</configuration>
 			</plugin>
-			<!--plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.8</version>
@@ -54,7 +53,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin-->
+			</plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -117,10 +116,10 @@
 		</profile>
 	</profiles>
 	<distributionManagement>
-	<repository>
-		<id>fwd-sg-maven-group</id>
-		<name>fwd-sg-maven-group</name>
-		<url>https://fwd-sg-612556329065.d.codeartifact.ap-southeast-1.amazonaws.com/maven/maven-group/</url>
-	</repository>
-  </distributionManagement>
+		<repository>
+			<id>fwd-sg-maven-group</id>
+			<name>fwd-sg-maven-group</name>
+			<url>https://fwd-sg-612556329065.d.codeartifact.ap-southeast-1.amazonaws.com/maven/maven-group/</url>
+		</repository>
+	</distributionManagement>
 </project>

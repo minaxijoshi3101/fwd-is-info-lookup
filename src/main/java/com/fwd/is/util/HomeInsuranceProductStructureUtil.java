@@ -31,7 +31,7 @@ public class HomeInsuranceProductStructureUtil {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public Object getHideHomeInsuranceQuestion() {
+	public boolean getHideHomeInsuranceQuestion() {
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.getForEntity(hideHomeInsuranceQuestionURL,
 					String.class);
@@ -57,11 +57,11 @@ public class HomeInsuranceProductStructureUtil {
 
 	}
 
-	private Object getValueFromJson(JSONObject response) {
+	private boolean getValueFromJson(JSONObject response) {
 		if (Objects.nonNull(response)) {
-			return response.get("hide_home_insurance_question");
+			return response.getBoolean("hide_home_insurance_question");
 		}
-		return null;
+		return false;
 	}
 
 	private JSONObject getJsonFromString(String response) {

@@ -4,5 +4,5 @@ import com.fwd.data.common.home.HomeOwnerInfoResponse;
 
 public interface HomeInsuranceInfoLookupFacade {
 
-	public HomeOwnerInfoResponse getProductStructure(String policyHolderType);
+	HomeOwnerInfoResponse getProductStructure(String policyHolderType);
 }

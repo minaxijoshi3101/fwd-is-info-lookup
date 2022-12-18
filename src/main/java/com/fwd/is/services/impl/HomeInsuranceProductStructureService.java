@@ -2,29 +2,34 @@ package com.fwd.is.services.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Resource;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fwd.data.common.home.CodeTable;
-import com.fwd.data.common.home.Data;
+import com.fwd.data.common.home.HomeCodeTable;
+import com.fwd.data.common.home.HomeData;
 import com.fwd.data.common.home.HomeOwnerInfoResponse;
 import com.fwd.data.common.home.HomeType;
 import com.fwd.data.common.home.PolicyHolderType;
+import com.fwd.ia.common.exception.RequestFailedException;
 import com.fwd.ia.ebao.adaptor.EBAOAdaptor;
-import com.fwd.ia.ebao.adaptor.exceptions.EBAOAdaptorException;
-import com.fwd.is.common.exceptions.IntegrationServiceException;
+import com.fwd.is.common.constant.Constants;
+import com.fwd.is.common.exceptions.JsonParsingException;
+import com.fwd.is.common.services.ParallelExecutorService;
+import com.fwd.is.common.task.ProductStructureTask;
 import com.fwd.is.services.ProductStructureService;
+import com.fwd.is.util.HideHomeInsuranceQuestionTask;
 import com.fwd.is.util.HomeInsuranceProductStructureUtil;
 
 @Service("homeInsuranceProductStructureService")
@@ -32,13 +37,18 @@ public class HomeInsuranceProductStructureService implements ProductStructureSer
 
 	private static final Logger LOG = LogManager.getLogger(HomeInsuranceProductStructureService.class);
 
-	private static final List<String> PRODUCT_TYPES = Arrays.asList("HOMEOWNER", "TENANT");
+	private static final List<String> PRODUCT_TYPES_LIST = Arrays.asList("HOMEOWNER", "TENANT");
+	private static final String POLICY_HDB_TABLE_NAME = "PolicyRiskADDRESSHDBType";
+	private static final String POLICY_CONDO_TABLE_NAME = "PolicyRiskADDRESSCondoType";
+	private static final String POLICY_TERM_TABLE_NAME = "PolicyLobHMTerm";
+
+	private static final String HIDE_HOME_INSURANCE_QUESTION = "hideHomeInsuranceQuestion";
 
 	@Value("${home.product.code}")
 	private String homeProductCode;
-
-	@Value("#{${home.product.table.names}}")
-	private Set<String> tableNames;
+	
+	@Value("${api.success.status.code}")
+	private String successStatusCode;
 
 	@Value("${home.landed.data}")
 	private String landedJson;
@@ -49,97 +59,106 @@ public class HomeInsuranceProductStructureService implements ProductStructureSer
 	@Value("${tenant.data}")
 	private String tenantJson;
 
-	@Resource(name = "ebaoAdaptor")
+	@Autowired
 	private EBAOAdaptor ebaoAdaptor;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Autowired
 	private HomeInsuranceProductStructureUtil productStructureUtil;
 
+	@Autowired
+	private ParallelExecutorService parallelExecutorService;
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public HomeOwnerInfoResponse getStructure(String policyHolderType) {
-		HomeOwnerInfoResponse homeOwnerInfoResponse = new HomeOwnerInfoResponse();
-		if (!PRODUCT_TYPES.contains(policyHolderType)) {
-			homeOwnerInfoResponse.setMessage("Bad request");
-			return homeOwnerInfoResponse;
-		}
 		try {
-			homeOwnerInfoResponse.setStatusCode("0");
-			homeOwnerInfoResponse.setMessage("success");
-			Data data = new Data();
-			List<HomeType> homeTypeList = new ArrayList<>();
-			// landed data
-			HomeType landedData = new ObjectMapper().readValue(landedJson, HomeType.class);
-			homeTypeList.add(landedData);
+			String reqId = String.format("REQID::%s::REQID", UUID.randomUUID().toString());
+			LOG.info("{} START++++ Get Product Structure ++++START", reqId);
+
+			if (!PRODUCT_TYPES_LIST.contains(policyHolderType)) {
+				LOG.info("Invalid policy holder type. policyHolderType: {}", policyHolderType);
+				throw new RequestFailedException(
+						"Policy holder type is invalid, only HOMEOWNER or TENANT are allowed.");
+			}
 
 			// Get Product Id
 			String productId = ebaoAdaptor.getProductId(homeProductCode);
 
-			// Get Code List
-			for (String tableName : tableNames) {
-				List<CodeTable> codeList = ebaoAdaptor.getCodeTableList(tableName, productId);
-				if ("PolicyLobHMTerm".equals(tableName)) {
-					data.setTerms(codeList);
-				} else {
-					homeTypeList.add(populateHomeTypeDate(tableName, codeList));
-				}
-			}
-			// Home Types
+			// ###### Parallel Execution - START #######
+			Map<String, Callable<?>> tasks = new HashMap<>();
+			tasks.put(POLICY_HDB_TABLE_NAME, new ProductStructureTask(POLICY_HDB_TABLE_NAME, productId, ebaoAdaptor,
+					objectMapper, Constants.CODE_TABLE_BY_TABLE_NAME, new TypeReference<List<HomeCodeTable>>() {
+					}));
+			tasks.put(POLICY_CONDO_TABLE_NAME, new ProductStructureTask(POLICY_CONDO_TABLE_NAME, productId, ebaoAdaptor,
+					objectMapper, Constants.CODE_TABLE_BY_TABLE_NAME, new TypeReference<List<HomeCodeTable>>() {
+					}));
+			tasks.put(POLICY_TERM_TABLE_NAME, new ProductStructureTask(POLICY_TERM_TABLE_NAME, productId, ebaoAdaptor,
+					objectMapper, Constants.CODE_TABLE_BY_TABLE_NAME, new TypeReference<List<HomeCodeTable>>() {
+					}));
+			tasks.put(HIDE_HOME_INSURANCE_QUESTION, new HideHomeInsuranceQuestionTask(productStructureUtil));
+
+			Map<String, ?> parallelExecutorResult = parallelExecutorService.executeHeterogenous(tasks);
+			// ###### Parallel Execution - END #######
+
+			List<HomeType> homeTypeList = new ArrayList<>();
+
+			// landed data
+			homeTypeList.add(objectMapper.readValue(landedJson, HomeType.class));
+
+			// HDB Type List, Condo Type List and Term List
+			homeTypeList.add(populateHomeTypeDate(POLICY_HDB_TABLE_NAME,
+					(List<HomeCodeTable>) parallelExecutorResult.get(POLICY_HDB_TABLE_NAME)));
+			homeTypeList.add(populateHomeTypeDate(POLICY_CONDO_TABLE_NAME,
+					(List<HomeCodeTable>) parallelExecutorResult.get(POLICY_CONDO_TABLE_NAME)));
+
+			// Set terms, homeTypes, and policyHolderTypes
+			HomeData data = new HomeData();
+			data.setTerms((List<HomeCodeTable>) parallelExecutorResult.get(POLICY_TERM_TABLE_NAME));
 			data.setHomeTypes(homeTypeList);
-			// Policy Holder Types
 			data.setPolicyHolderTypes(populatePolicyHolderTypes(policyHolderType));
-			data.setHideHomeInsuranceQuestion(productStructureUtil.getHideHomeInsuranceQuestion());
+			data.setHideHomeInsuranceQuestion(
+					(boolean) ((List) parallelExecutorResult.get(HIDE_HOME_INSURANCE_QUESTION)).get(0));
+
+			// Build API Response
+			HomeOwnerInfoResponse homeOwnerInfoResponse = new HomeOwnerInfoResponse();
+			homeOwnerInfoResponse.setStatusCode(successStatusCode);
+			homeOwnerInfoResponse.setMessage(Constants.SUCCESS);
 			homeOwnerInfoResponse.setData(data);
 
+			LOG.info("{} END++++ Get Product Structure ++++END", reqId);
 			return homeOwnerInfoResponse;
-
-		} catch (JsonProcessingException e) {
-			LOG.error("Exception occurred while parsing json.", e);
-			throw new IntegrationServiceException("Exception occurred while parsing json.", e);
-
-		} catch (EBAOAdaptorException e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(e.getMessage(), e);
-			}
-
-			HomeOwnerInfoResponse response = new HomeOwnerInfoResponse();
-			if ((Integer) e.getStatusCode() == 404) {
-				response.setMessage("Resource Not Found.");
-				return response;
-			} else {
-				response.setMessages(new JSONObject(e.getResponseJson()).toMap());
-				return response;
-			}
-		} catch (Exception e) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug(e.getMessage(), e);
-			}
-			throw new IntegrationServiceException("Exception occured while retrieving home owner info.", e);
+		} catch (JsonProcessingException e1) {
+			String err = "Error occured while parsing json. " + e1.getMessage();
+			LOG.error(err, e1);
+			throw new JsonParsingException(err, e1);
 		}
 	}
 
 	private List<PolicyHolderType> populatePolicyHolderTypes(String policyHolderType) throws JsonProcessingException {
 		List<PolicyHolderType> policyHolderTypes = null;
 		if ("HOMEOWNER".equals(policyHolderType)) {
-			PolicyHolderType[] poliHolderTypesArray = new ObjectMapper().readValue(homeOwnerJson,
-					PolicyHolderType[].class);
-			policyHolderTypes = Arrays.asList(poliHolderTypesArray);
+			policyHolderTypes = objectMapper.readValue(homeOwnerJson,
+					new TypeReference<List<PolicyHolderType>>() {
+					});
 
 		} else if ("TENANT".equals(policyHolderType)) {
-			PolicyHolderType[] poliHolderTypesArray = new ObjectMapper().readValue(tenantJson,
-					PolicyHolderType[].class);
-			policyHolderTypes = Arrays.asList(poliHolderTypesArray);
+			policyHolderTypes = objectMapper.readValue(tenantJson, new TypeReference<List<PolicyHolderType>>() {
+			});
 		}
 		return policyHolderTypes;
 	}
 
-	private HomeType populateHomeTypeDate(String tableName, List<CodeTable> codeList) {
+	private HomeType populateHomeTypeDate(String tableName, List<HomeCodeTable> codeList) {
 		HomeType homeTypeData = new HomeType();
-		if ("PolicyRiskADDRESSHDBType".equals(tableName)) {
+		if (POLICY_HDB_TABLE_NAME.equals(tableName)) {
 			homeTypeData.setCode("HDB");
 			homeTypeData.setDescription("HDB");
 			homeTypeData.setId("HDB");
 
-		} else if ("PolicyRiskADDRESSCondoType".equals(tableName)) {
+		} else if (POLICY_CONDO_TABLE_NAME.equals(tableName)) {
 			homeTypeData.setCode("Condo");
 			homeTypeData.setDescription("Condo/ Executive Condo");
 			homeTypeData.setId("Condo");
@@ -148,11 +167,11 @@ public class HomeInsuranceProductStructureService implements ProductStructureSer
 		return homeTypeData;
 	}
 
-	public void setHomeProductCode(String homeProductCode) {
-		this.homeProductCode = homeProductCode;
-	}
-
 	public void setLandedJson(String landedJson) {
 		this.landedJson = landedJson;
+	}
+
+	public void setSuccessStatusCode(String successStatusCode) {
+		this.successStatusCode = successStatusCode;
 	}
 }
