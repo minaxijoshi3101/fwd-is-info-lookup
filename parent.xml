@@ -183,7 +183,7 @@
 		</dependency>
 	</dependencies>
 
-	<modules>
+	<!--modules>
 		<module>../fwd-data-common</module>
 		<module>../fwd-ia-common</module>
 		<module>../fwd-ia-qas</module>
@@ -195,14 +195,15 @@
 		<module>../fwd-ia-payment</module>
 		<module>../fwd-ia-referral</module>
 		<module>../fwd-ia-mailer</module>
+		<module>../fwd-ia-misc</module>
 		<module>../fwd-is-common</module>
 		<module>../fwd-is-info-lookup</module>
 		<module>../fwd-is-quotation</module>
 		<module>../fwd-is-application</module>
 		<module>../fwd-is-payment</module>
-	</modules>
+	</modules-->
 
-	<profiles>
+	<!--profiles>
 		<profile>
 			<id>sonar</id>
 			<activation>
@@ -212,7 +213,7 @@
 				<sonar.host.url>http://172.18.65.185:9000/sonarqubedb</sonar.host.url>
 			</properties>
 		</profile>
-	</profiles>
+	</profiles -->
 
 	<build>
 		<plugins>
