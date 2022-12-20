@@ -6,65 +6,122 @@
 	<parent>
 		<groupId>com.fwd.is.parent</groupId>
 		<artifactId>fwd-is-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 		<relativePath>parent.xml</relativePath>
 	</parent>
 	<artifactId>fwd-is-info-lookup</artifactId>
 	<name>fwd-is-info-lookup</name>
+	<version>1.0.0</version>
 	<description>FWD Integration Service Info Lookup</description>
+	
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+  		<maven.compiler.target>1.8</maven.compiler.target>
+		<java.version>1.8</java.version>
+		<httpclient.version>4.5.2</httpclient.version>
+		<fwd-data-common.version>1.0.0</fwd-data-common.version>
+		<fwd-ia-common.version>1.0.0</fwd-ia-common.version>
+		<fwd-ia-ebao.version>1.0.0</fwd-ia-ebao.version>
+		<fwd-ia-campaign.version>1.0.0</fwd-ia-campaign.version>
+		<fwd-ia-clientf.version>1.0.0</fwd-ia-clientf.version>
+		<fwd-ia-tsofa.version>1.0.0</fwd-ia-tsofa.version>
+		<fwd-ia-ccr.version>1.0.0</fwd-ia-ccr.version>
+		<fwd-ia-mailer.version>1.0.0</fwd-ia-mailer.version>
+		<fwd-ia-misc.version>1.0.0</fwd-ia-misc.version>
+		<fwd-is-common.version>1.0.0</fwd-is-common.version>
+	</properties>
+	
 	<dependencies>
+		<dependency>
+			<groupId>com.fwd.data.common</groupId>
+			<artifactId>fwd-data-common</artifactId>
+			<version>${fwd-data-common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.common</groupId>
+			<artifactId>fwd-ia-common</artifactId>
+			<version>${fwd-ia-common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.ebao</groupId>
+			<artifactId>fwd-ia-ebao</artifactId>
+			<version>${fwd-ia-ebao.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.campaign</groupId>
+			<artifactId>fwd-ia-campaign</artifactId>
+			<version>${fwd-ia-campaign.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.clientf</groupId>
+			<artifactId>fwd-ia-clientf</artifactId>
+			<version>${fwd-ia-clientf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.tsofa</groupId>
+			<artifactId>fwd-ia-tsofa</artifactId>
+			<version>${fwd-ia-tsofa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.ccr</groupId>
+			<artifactId>fwd-ia-ccr</artifactId>
+			<version>${fwd-ia-ccr.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.mailer</groupId>
+			<artifactId>fwd-ia-mailer</artifactId>
+			<version>${fwd-ia-mailer.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fwd.ia.misc</groupId>
+			<artifactId>fwd-ia-misc</artifactId>
+			<version>${fwd-ia-misc.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fwd.is.common</groupId>
 			<artifactId>fwd-is-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${fwd-is-common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-hikaricp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<executable>true</executable>
-					<includeSystemScope>true</includeSystemScope>
-				</configuration>
-			</plugin>
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<delete
-									file="${basedir}/src/main/resources/application.properties" />
-								<delete file="${basedir}/src/main/resources/log4j2.xml" />
-								<copy
-									file="${basedir}/../fwd-is-parent/application.properties"
-									tofile="${basedir}/src/main/resources/application.properties" />
-								<copy file="${basedir}/../fwd-is-parent/log4j2.xml"
-									tofile="${basedir}/src/main/resources/log4j2.xml" />
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin> -->
-		</plugins>
-	</build>
 	<profiles>
 		<profile>
 			<id>dev</id>
 			<properties>
 				<active.profile>dev</active.profile>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
+			</properties>			
 		</profile>
 		<profile>
 			<id>test</id>
@@ -101,6 +158,9 @@
 			<properties>
 				<active.profile>sit</active.profile>
 			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 		</profile>
 		<profile>
 			<id>uata</id>
@@ -115,11 +175,26 @@
 			</properties>
 		</profile>
 	</profiles>
-	<distributionManagement>
-		<repository>
-			<id>fwd-sg-maven-group</id>
-			<name>fwd-sg-maven-group</name>
-			<url>https://fwd-sg-612556329065.d.codeartifact.ap-southeast-1.amazonaws.com/maven/maven-group/</url>
-		</repository>
-	</distributionManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version> <!-- or whatever current version -->
+			    <configuration>
+			      <source>1.8</source>
+			      <target>1.8</target>
+			    </configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

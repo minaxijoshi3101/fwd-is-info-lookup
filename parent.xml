@@ -5,7 +5,7 @@
 
 	<groupId>com.fwd.is.parent</groupId>
 	<artifactId>fwd-is-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>Mulesoft and IS Reengineering</name>
@@ -18,9 +18,11 @@
 	</parent>
 
 	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+   		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 		<springfox-swagger2.version>2.6.1</springfox-swagger2.version>
 		<springfox-swagger-ui.version>2.6.1</springfox-swagger-ui.version>
 		<cxf.version>3.1.6</cxf.version>
@@ -182,76 +184,7 @@
  			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
-	<!--modules>
-		<module>../fwd-data-common</module>
-		<module>../fwd-ia-common</module>
-		<module>../fwd-ia-qas</module>
-		<module>../fwd-ia-ebao</module>
-		<module>../fwd-ia-tsofa</module>
-		<module>../fwd-ia-clientf</module>
-		<module>../fwd-ia-campaign</module>
-		<module>../fwd-ia-ccr</module>
-		<module>../fwd-ia-payment</module>
-		<module>../fwd-ia-referral</module>
-		<module>../fwd-ia-mailer</module>
-		<module>../fwd-ia-misc</module>
-		<module>../fwd-is-common</module>
-		<module>../fwd-is-info-lookup</module>
-		<module>../fwd-is-quotation</module>
-		<module>../fwd-is-application</module>
-		<module>../fwd-is-payment</module>
-	</modules-->
-
-	<!--profiles>
-		<profile>
-			<id>sonar</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<properties>
-				<sonar.host.url>http://172.18.65.185:9000/sonarqubedb</sonar.host.url>
-			</properties>
-		</profile>
-	</profiles -->
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.9.1.2184</version>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.7</version>
-				<executions>
-					<execution>
-						<id>prepare-agent</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<goals>
-							<goal>report</goal>
-						</goals>
-						<configuration>
-							<formats>
-								<format>XML</format>
-							</formats>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+	
 	<distributionManagement>
         <repository>
             <id>fwd-sg-maven-group</id>
