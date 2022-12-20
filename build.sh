@@ -1,7 +1,7 @@
 #! /bin/bash
 source ~/.bash_profile
 export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain fwd-sg --domain-owner 612556329065 --region ap-southeast-1 --query authorizationToken --output text`
-mvn clean package -Dmaven.test.skip=true -DrepositoryId=fwd-sg-maven-group
+mvn clean package -Dmaven.test.skip=true -DrepositoryId=fwd-sg-maven-group -Psit
 #mvn deploy -DrepositoryId=fwd-sg-maven-group
 app_name=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="artifactId"]/text()' pom.xml)
 version=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' pom.xml)
