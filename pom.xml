@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>com.fwd.is.parent</groupId>
 		<artifactId>fwd-is-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>parent.xml</relativePath>
 	</parent>
 	<artifactId>fwd-is-info-lookup</artifactId>
 	<name>fwd-is-info-lookup</name>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<description>FWD Integration Service Info Lookup</description>
 	
 	<properties>
@@ -19,16 +19,16 @@
   		<maven.compiler.target>1.8</maven.compiler.target>
 		<java.version>1.8</java.version>
 		<httpclient.version>4.5.2</httpclient.version>
-		<fwd-data-common.version>1.0.0</fwd-data-common.version>
-		<fwd-ia-common.version>1.0.0</fwd-ia-common.version>
-		<fwd-ia-ebao.version>1.0.0</fwd-ia-ebao.version>
-		<fwd-ia-campaign.version>1.0.0</fwd-ia-campaign.version>
-		<fwd-ia-clientf.version>1.0.0</fwd-ia-clientf.version>
-		<fwd-ia-tsofa.version>1.0.0</fwd-ia-tsofa.version>
-		<fwd-ia-ccr.version>1.0.0</fwd-ia-ccr.version>
-		<fwd-ia-mailer.version>1.0.0</fwd-ia-mailer.version>
-		<fwd-ia-misc.version>1.0.0</fwd-ia-misc.version>
-		<fwd-is-common.version>1.0.0</fwd-is-common.version>
+		<fwd-data-common.version>1.0.0-SNAPSHOT</fwd-data-common.version>
+		<fwd-ia-common.version>1.0.0-SNAPSHOT</fwd-ia-common.version>
+		<fwd-ia-ebao.version>1.0.0-SNAPSHOT</fwd-ia-ebao.version>
+		<fwd-ia-campaign.version>1.0.0-SNAPSHOT</fwd-ia-campaign.version>
+		<fwd-ia-clientf.version>1.0.0-SNAPSHOT</fwd-ia-clientf.version>
+		<fwd-ia-tsofa.version>1.0.0-SNAPSHOT</fwd-ia-tsofa.version>
+		<fwd-ia-ccr.version>1.0.0-SNAPSHOT</fwd-ia-ccr.version>
+		<fwd-ia-mailer.version>1.0.0-SNAPSHOT</fwd-ia-mailer.version>
+		<fwd-ia-misc.version>1.0.0-SNAPSHOT</fwd-ia-misc.version>
+		<fwd-is-common.version>1.0.0-SNAPSHOT</fwd-is-common.version>
 	</properties>
 	
 	<dependencies>
@@ -197,4 +197,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+        <repository>
+            <id>fwd-sg-maven-group</id>
+            <name>fwd-sg-maven-group</name>
+            <url>https://fwd-sg-612556329065.d.codeartifact.ap-southeast-1.amazonaws.com/maven/maven-group/</url>
+        </repository>
+    </distributionManagement>
 </project>
