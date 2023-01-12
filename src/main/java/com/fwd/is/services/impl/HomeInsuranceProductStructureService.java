@@ -98,7 +98,8 @@ public class HomeInsuranceProductStructureService implements ProductStructureSer
 			tasks.put(POLICY_TERM_TABLE_NAME, new ProductStructureTask(POLICY_TERM_TABLE_NAME, productId, ebaoAdaptor,
 					objectMapper, Constants.CODE_TABLE_BY_TABLE_NAME, new TypeReference<List<HomeCodeTable>>() {
 					}));
-			tasks.put(HIDE_HOME_INSURANCE_QUESTION, new HideHomeInsuranceQuestionTask(productStructureUtil));
+			//As per client suggested below api call for ajax is not required any more.
+			//tasks.put(HIDE_HOME_INSURANCE_QUESTION, new HideHomeInsuranceQuestionTask(productStructureUtil));
 
 			Map<String, ?> parallelExecutorResult = parallelExecutorService.executeHeterogenous(tasks);
 			// ###### Parallel Execution - END #######
@@ -119,8 +120,8 @@ public class HomeInsuranceProductStructureService implements ProductStructureSer
 			data.setTerms((List<HomeCodeTable>) parallelExecutorResult.get(POLICY_TERM_TABLE_NAME));
 			data.setHomeTypes(homeTypeList);
 			data.setPolicyHolderTypes(populatePolicyHolderTypes(policyHolderType));
-			data.setHideHomeInsuranceQuestion(
-					(boolean) ((List) parallelExecutorResult.get(HIDE_HOME_INSURANCE_QUESTION)).get(0));
+			//As per client suggested below api call for ajax is not required any more.
+			//data.setHideHomeInsuranceQuestion((boolean) ((List) parallelExecutorResult.get(HIDE_HOME_INSURANCE_QUESTION)).get(0));
 
 			// Build API Response
 			HomeOwnerInfoResponse homeOwnerInfoResponse = new HomeOwnerInfoResponse();
