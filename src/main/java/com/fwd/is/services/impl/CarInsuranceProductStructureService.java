@@ -19,7 +19,7 @@ import com.fwd.data.common.CodeTable;
 import com.fwd.data.common.car.CarProductStructureResponse;
 import com.fwd.data.common.car.CarStructureData;
 import com.fwd.data.common.car.CountriesList;
-import com.fwd.data.common.car.MakeList;
+import com.fwd.data.common.car.CodeTableList;
 import com.fwd.ia.ebao.adaptor.EBAOAdaptor;
 import com.fwd.is.common.constant.Constants;
 import com.fwd.is.common.services.ParallelExecutorService;
@@ -29,7 +29,8 @@ import com.fwd.is.services.ProductStructureService;
 import com.fwd.is.util.ParseFileContentTask;
 
 @Service("carInsuranceProductStructureService")
-public class CarInsuranceProductStructureService implements ProductStructureService<String, CarProductStructureResponse> {
+public class CarInsuranceProductStructureService
+		implements ProductStructureService<String, CarProductStructureResponse> {
 
 	private static final Logger LOG = LogManager.getLogger(CarInsuranceProductStructureService.class);
 
@@ -44,7 +45,6 @@ public class CarInsuranceProductStructureService implements ProductStructureServ
 	private static final String MARITAL_STATUS = "maritalStatus";
 	private static final String MAKE = "make";
 	private static final String COUNTRIES = "countries";
-	private static final String COUNTRIES_FILE_LOCATION = "classpath:mock/countries.json";
 
 	@Value("${car.product.code}")
 	private String carProductCode;
@@ -54,6 +54,9 @@ public class CarInsuranceProductStructureService implements ProductStructureServ
 
 	@Value("#{${car.product.structure.table.names}}")
 	private Map<String, String> tableNames;
+
+	@Value("${contries.list.file.path}")
+	private String countriesFilePath;
 
 	@Autowired
 	private EBAOAdaptor ebaoAdaptor;
@@ -79,7 +82,7 @@ public class CarInsuranceProductStructureService implements ProductStructureServ
 		JSONObject request = new JSONObject();
 		request.put(AUTO_LINE, PV);
 		tasks.put(tableNames.get(MAKE), new ProductStructureTask(tableNames.get(MAKE), ebaoAdaptor, objectMapper,
-				new TypeReference<List<MakeList>>() {
+				new TypeReference<List<CodeTableList>>() {
 				}, request.toString(), Constants.COMMON_CODE_TABLE_BY_TABLE_NAME));
 
 		// 2. Marital Status
@@ -120,9 +123,8 @@ public class CarInsuranceProductStructureService implements ProductStructureServ
 				new ProductStructureTask(ebaoAdaptor, Constants.GET_MAX_VEHICLE_AGE_FOR_NB));
 
 		// 9. Country List
-		tasks.put(COUNTRIES,
-				new ParseFileContentTask(COUNTRIES_FILE_LOCATION, new TypeReference<List<CountriesList>>() {
-				}, objectMapper));
+		tasks.put(COUNTRIES, new ParseFileContentTask(countriesFilePath, new TypeReference<List<CountriesList>>() {
+		}, objectMapper));
 
 		Map<String, ?> parallelExecutorResult = parallelExecutorService.executeHeterogenous(tasks);
 
@@ -143,7 +145,7 @@ public class CarInsuranceProductStructureService implements ProductStructureServ
 		carInfoResponse.setMessage("Successfully return product structure");
 
 		CarStructureData data = new CarStructureData();
-		data.setMakeList((List<MakeList>) parallelExecutorResult.get(tableNames.get(MAKE)));
+		data.setMakeList((List<CodeTableList>) parallelExecutorResult.get(tableNames.get(MAKE)));
 		data.setMaritalStatusList((List<CodeTable<String>>) parallelExecutorResult.get(tableNames.get(MARITAL_STATUS)));
 		data.setDrivingExperienceList(
 				(List<CodeTable<String>>) parallelExecutorResult.get(tableNames.get(DRIVING_EXP)));

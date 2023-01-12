@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fwd.data.common.car.ModelListData;
+import com.fwd.data.common.car.CodeTableList;
 import com.fwd.data.common.car.ModelListResponse;
 import com.fwd.ia.common.constants.Constants;
 import com.fwd.is.common.exceptions.JsonParsingException;
@@ -61,8 +61,8 @@ public class CarInsuranceModelByMakeService implements ModelByMakeService<String
 
 			String codeListObject = ebaoUtil.commonCodeTableByTableName(MODEL, request.toString());
 			if (StringUtils.isNotBlank(codeListObject)) {
-				List<ModelListData> myObjects = objectMapper.readValue(codeListObject,
-						new TypeReference<List<ModelListData>>() {
+				List<CodeTableList> myObjects = objectMapper.readValue(codeListObject,
+						new TypeReference<List<CodeTableList>>() {
 						});
 				response.setData(myObjects);
 				response.setMessage(SUCCESS_MESSAGE);

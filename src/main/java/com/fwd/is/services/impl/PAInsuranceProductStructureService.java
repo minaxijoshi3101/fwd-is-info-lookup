@@ -62,12 +62,15 @@ public class PAInsuranceProductStructureService implements PAStructureService<St
 	private static final String KEY_PA_LABELS_DATA = "PA_LABELS_DATA";
 	private static final String COUNTRIES = "countries";
 
-	private static final String POLICY_DETAILS_FILE_PATH = "classpath:mock/policyDetails.json";
-	private static final String COUNTRIES_FILE_PATH = "classpath:mock/countries.json";
-
 	@Value("${pa.product.code}")
 	private String paProductCode;
-	
+
+	@Value("${contries.list.file.path}")
+	private String countriesFilePath;
+
+	@Value("${policy.details.file.path}")
+	private String policyDetailsFilePath;
+
 	@Value("${api.success.status.code}")
 	private String successStatusCode;
 
@@ -111,12 +114,11 @@ public class PAInsuranceProductStructureService implements PAStructureService<St
 		tasks.put(ADDITIONAL_QUESTION_AMOUNT,
 				new DiscountRateFromCodeTask(Constants.ELE_DISC_ADDITIONAL_QN, paProductCode, eBaoUtil));
 
-		tasks.put(COUNTRIES, new ParseFileContentTask(COUNTRIES_FILE_PATH, new TypeReference<List<CountriesList>>() {
+		tasks.put(COUNTRIES, new ParseFileContentTask(countriesFilePath, new TypeReference<List<CountriesList>>() {
 		}, objectMapper));
 
-		tasks.put(POLICY_DETAILS,
-				new ParseFileContentTask(POLICY_DETAILS_FILE_PATH, new TypeReference<PolicyDetails>() {
-				}, objectMapper));
+		tasks.put(POLICY_DETAILS, new ParseFileContentTask(policyDetailsFilePath, new TypeReference<PolicyDetails>() {
+		}, objectMapper));
 
 		Map<String, ?> parallelExecutionResult = parallelExecutorService.executeHeterogenous(tasks);
 		// ##### Parallel Execution - END ######

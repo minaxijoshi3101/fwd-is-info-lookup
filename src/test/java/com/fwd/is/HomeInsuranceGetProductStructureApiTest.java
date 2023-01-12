@@ -8,8 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.annotation.PostConstruct;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +32,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fwd.is.common.exceptions.IntegrationServiceException;
+import com.fwd.is.common.exceptions.RedisException;
+import com.fwd.is.common.services.RedisCacheService;
 import com.fwd.is.common.utils.EBaoUtil;
 import com.fwd.is.services.impl.HomeInsuranceProductStructureService;
 import com.fwd.is.util.HomeInsuranceProductStructureUtil;
@@ -42,7 +48,7 @@ class HomeInsuranceGetProductStructureApiTest {
 
 	@Value("${api.home.insurance.mapping}")
 	private String baseUrl;
-	
+
 	@Value("${api.success.status.code}")
 	private String successStatusCode;
 
@@ -69,6 +75,25 @@ class HomeInsuranceGetProductStructureApiTest {
 
 	@Mock
 	private RestTemplate restTemplate;
+
+	private static RedisCacheService redisCacheService;
+
+	private static ApplicationContext context;
+
+	@Autowired
+	public HomeInsuranceGetProductStructureApiTest(ApplicationContext applicationContext) {
+		context = applicationContext;
+	}
+
+	@PostConstruct
+	static void initializeBeansTestSetUp() {
+		redisCacheService = context.getBean(RedisCacheService.class);
+	}
+
+	@AfterAll
+	static void flushAllRedisCaches() throws RedisException {
+		redisCacheService.evictAllCaches();
+	}
 
 	@Test
 	@DisplayName("Get product structure positive response with policyHolderType as HOMEOWNER.")
