@@ -26,7 +26,7 @@ public class CarInsuranceInfoLookupFacadeImpl implements CarInsuranceInfoLookupF
 		return carInsuranceProductStructureService.getStructure(StringUtils.EMPTY);
 	}
 
-	@Cacheable(value = "modelByMake", key = "{#carMakeCode}")
+	@Cacheable(value = "modelList", key = "{'carMakeCode_'.concat(#carMakeCode)}")
 	@Override
 	public ModelListResponse getModelList(String carMakeCode) {
 		return carInsuranceModelByMakeService.getModelList(carMakeCode);

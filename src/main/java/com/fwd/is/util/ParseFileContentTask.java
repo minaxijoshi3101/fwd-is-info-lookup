@@ -54,7 +54,7 @@ public class ParseFileContentTask implements Callable<Object> {
 		return result;
 	}
 
-	public String readBigStringIn(BufferedReader buffIn) throws IOException {
+	private String readBigStringIn(BufferedReader buffIn) throws IOException {
 		StringBuilder everything = new StringBuilder();
 		String line;
 		while ((line = buffIn.readLine()) != null) {

@@ -29,8 +29,6 @@ import com.fwd.is.common.exceptions.JsonParsingException;
 import com.fwd.is.common.services.ParallelExecutorService;
 import com.fwd.is.common.task.ProductStructureTask;
 import com.fwd.is.services.ProductStructureService;
-import com.fwd.is.util.HideHomeInsuranceQuestionTask;
-import com.fwd.is.util.HomeInsuranceProductStructureUtil;
 
 @Service("homeInsuranceProductStructureService")
 public class HomeInsuranceProductStructureService implements ProductStructureService<String, HomeOwnerInfoResponse> {
@@ -41,8 +39,6 @@ public class HomeInsuranceProductStructureService implements ProductStructureSer
 	private static final String POLICY_HDB_TABLE_NAME = "PolicyRiskADDRESSHDBType";
 	private static final String POLICY_CONDO_TABLE_NAME = "PolicyRiskADDRESSCondoType";
 	private static final String POLICY_TERM_TABLE_NAME = "PolicyLobHMTerm";
-
-	private static final String HIDE_HOME_INSURANCE_QUESTION = "hideHomeInsuranceQuestion";
 
 	@Value("${home.product.code}")
 	private String homeProductCode;
@@ -66,12 +62,9 @@ public class HomeInsuranceProductStructureService implements ProductStructureSer
 	private ObjectMapper objectMapper;
 
 	@Autowired
-	private HomeInsuranceProductStructureUtil productStructureUtil;
-
-	@Autowired
 	private ParallelExecutorService parallelExecutorService;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked"})
 	@Override
 	public HomeOwnerInfoResponse getStructure(String policyHolderType) {
 		try {
