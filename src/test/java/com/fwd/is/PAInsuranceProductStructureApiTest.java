@@ -1,7 +1,10 @@
 package com.fwd.is;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.json.JSONObject;
@@ -21,16 +24,21 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fwd.ia.ebao.adaptor.EBAOAdaptor;
+import com.fwd.is.common.utils.EBaoUtil;
 import com.fwd.is.services.impl.PAInsuranceProductStructureService;
+import com.fwd.is.tasks.DiscountRateFromCodeTask;
 
 @SpringBootTest(classes = InfoLookupStarter.class)
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
 class PAInsuranceProductStructureApiTest {
 
+	private static final double DISCOUNT_RATE = 10.9D;
+	private static final String TEST_TABLE_NAME = "testTableName";
+
 	@Value("${api.pa.insurance.mapping}")
 	private String baseUrl;
-	
+
 	@Value("${api.success.status.code}")
 	private String successStatusCode;
 
@@ -46,6 +54,9 @@ class PAInsuranceProductStructureApiTest {
 	@Mock
 	private ObjectMapper mockObjectMapper;
 
+	@Mock
+	private EBaoUtil eBaoUtil;
+
 	@Test
 	@DisplayName("Get product structure positive test.")
 	void getProductStructurePositiveTest() throws Exception {
@@ -58,6 +69,18 @@ class PAInsuranceProductStructureApiTest {
 		assertEquals("success", response.getString("status"));
 		assertEquals("0", response.getString("status_code"));
 		assertEquals("Successfully retrieved product structure", response.getString("message"));
+	}
+
+	@Test
+	@DisplayName("Get discount rate from code task positive test.")
+	void getDiscountRateFromCodePositiveTest() throws Exception {
+		DiscountRateFromCodeTask task = new DiscountRateFromCodeTask(TEST_TABLE_NAME, "PA", eBaoUtil);
+		DiscountRateFromCodeTask testTask = new DiscountRateFromCodeTask();
+		when(eBaoUtil.getDiscountRateFromCode(anyString(), anyString())).thenReturn(DISCOUNT_RATE);
+		Double discountRate = task.call();
+		boolean isExpectationMatched = discountRate == DISCOUNT_RATE;
+		assertTrue(isExpectationMatched);
+		assertNotNull(testTask);
 	}
 
 }

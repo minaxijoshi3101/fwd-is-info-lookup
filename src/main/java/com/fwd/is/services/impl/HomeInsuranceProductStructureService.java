@@ -27,8 +27,8 @@ import com.fwd.ia.ebao.adaptor.EBAOAdaptor;
 import com.fwd.is.common.constant.Constants;
 import com.fwd.is.common.exceptions.JsonParsingException;
 import com.fwd.is.common.services.ParallelExecutorService;
-import com.fwd.is.common.task.ProductStructureTask;
 import com.fwd.is.services.ProductStructureService;
+import com.fwd.is.tasks.ProductStructureTask;
 
 @Service("homeInsuranceProductStructureService")
 public class HomeInsuranceProductStructureService implements ProductStructureService<String, HomeOwnerInfoResponse> {

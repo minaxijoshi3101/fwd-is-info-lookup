@@ -23,9 +23,9 @@ import com.fwd.data.common.car.CodeTableList;
 import com.fwd.ia.ebao.adaptor.EBAOAdaptor;
 import com.fwd.is.common.constant.Constants;
 import com.fwd.is.common.services.ParallelExecutorService;
-import com.fwd.is.common.task.ProductStructureTask;
 import com.fwd.is.common.utils.TraversalUtil;
 import com.fwd.is.services.ProductStructureService;
+import com.fwd.is.tasks.ProductStructureTask;
 import com.fwd.is.util.ParseFileContentTask;
 
 @Service("carInsuranceProductStructureService")
