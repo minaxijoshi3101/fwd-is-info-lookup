@@ -68,6 +68,9 @@ public class ProductStructureTask implements Callable<List<?>> {
 		} else if (Constants.GET_MAX_VEHICLE_AGE_FOR_NB.equals(ebaoMethodName)) {
 			MaxVehicleResponse maxVehicleAgeResponse = ebaoAdaptor.getMaxVehicleAgeForNB();
 			return Arrays.asList(maxVehicleAgeResponse.getModel().getMaxVehicleAge());
+		} else if (Constants.AGE_BY_PRODUCT_CODE.equals(ebaoMethodName)) {
+			String ageGroupResponse = ebaoAdaptor.ageByProductCode(requestPayload);
+			return Arrays.asList(ageGroupResponse);
 		}
 		return result;
 	}
