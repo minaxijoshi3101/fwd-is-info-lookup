@@ -183,6 +183,11 @@
  			<version>${aws.sdk.version}</version>
  			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-secretsmanager</artifactId>
+			<version>${aws.version}</version>
+		</dependency>
 	</dependencies>
 	
 	<distributionManagement>
