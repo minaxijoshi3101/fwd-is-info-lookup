@@ -116,65 +116,6 @@
 			<artifactId>mssql-jdbc</artifactId>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<properties>
-				<active.profile>dev</active.profile>
-			</properties>			
-		</profile>
-		<profile>
-			<id>test</id>
-			<properties>
-				<active.profile>test</active.profile>
-			</properties>
-		</profile>
-		<profile>
-			<id>dockerTest</id>
-			<properties>
-				<active.profile>dockerTest</active.profile>
-			</properties>
-		</profile>
-		<profile>
-			<id>local</id>
-			<properties>
-				<active.profile>local</active.profile>
-			</properties>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<active.profile>prod</active.profile>
-			</properties>
-		</profile>
-		<profile>
-			<id>qa</id>
-			<properties>
-				<active.profile>qa</active.profile>
-			</properties>
-		</profile>
-		<profile>
-			<id>sit</id>
-			<properties>
-				<active.profile>sit</active.profile>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>uata</id>
-			<properties>
-				<active.profile>uata</active.profile>
-			</properties>
-		</profile>
-		<profile>
-			<id>uatb</id>
-			<properties>
-				<active.profile>uatb</active.profile>
-			</properties>
-		</profile>
-	</profiles>
 
 	<build>
 		<plugins>
