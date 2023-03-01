@@ -7,10 +7,10 @@
     "deploy_path":".",
     "deploy_command": "./deploy.sh",
     "deploy_env":{
-        "SIT": "SIT-A or SIT-B",
-        "UAT": "UAT-A or UAT-B",
+        "SIT": "SIT",
+        "UAT": "UAT",
         "PRE_PROD": "PRE-PROD",
-        "PROD": "PROD-A & PROD-B"
+        "PROD": "PROD"
     },
     "retro_env":{
         "SIT": "SIT-A or SIT-B",
