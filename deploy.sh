@@ -10,14 +10,14 @@ if [[ "$1" == "SIT" ]]; then
     targetGroupARN=arn:aws:elasticloadbalancing:ap-southeast-1:165901213126:targetgroup/fwd-is-info-lookup/14bf9964b1002685
     networkConfig="awsvpcConfiguration={subnets=[subnet-000afa848a09d7893,subnet-00a7d691241b6fb66],securityGroups=[sg-0fb000da57a1a0e9a]}"
     AWS_SECRET_MANAGER_ENABLED=true
-    #AWS_SECRET_MANAGER_ARN=arn:aws:secretsmanager:ap-southeast-1:165901213126:secret:sit-fwd-is-info-lookup-M60r5f
-    AWS_ARN_SECRET_MANAGER_DB=arn:aws:secretsmanager:ap-southeast-1:165901213126:secret:SIT-SG-GI-IS-DB-ibq5Zv
-    AWS_ARN_SECRET_MANAGER_APP=arn:aws:secretsmanager:ap-southeast-1:165901213126:secret:SIT-SG-GI-IS-INFOLOOKUP-myDNsz
+    AWS_SECRET_MANAGER_ARN=arn:aws:secretsmanager:ap-southeast-1:165901213126:secret:sit-fwd-is-info-lookup-M60r5f
     elif [[ "$1" == "UAT" ]]; then
+elif [[ "$1" == "UAT" ]]; then
     targetGroupARN=arn:aws:elasticloadbalancing:ap-southeast-1:022525172765:targetgroup/fwd-is-info-lookup/a7c4eba721afa70c
     networkConfig='awsvpcConfiguration={subnets=[subnet-0dadf4921a5da0251,subnet-0ebd7a195c050f2b8],securityGroups=[sg-0e24c8e15bfbc37a1]}'
     AWS_SECRET_MANAGER_ENABLED=true
-    AWS_SECRET_MANAGER_ARN=arn:aws:secretsmanager:ap-southeast-1:022525172765:secret:uat-fwd-is-info-lookup-ETiDYa
+    AWS_ARN_SECRET_MANAGER_DB=arn:aws:secretsmanager:ap-southeast-1:022525172765:secret:UAT-SG-GI-IS-DB-0zumpK
+    AWS_ARN_SECRET_MANAGER_APP=arn:aws:secretsmanager:ap-southeast-1:022525172765:secret:UAT-SG-GI-IS-INFOLOOKUP-rGNbqJ
 elif [[ "$1" == "PRE-PROD" ]]; then
     targetGroupARN=arn:aws:elasticloadbalancing:ap-southeast-1:230108722688:targetgroup/fwd-is-info-lookup/0ad59f985638f66b
     networkConfig='awsvpcConfiguration={subnets=[subnet-08c2805b2d5c482f9,subnet-06649d60a6c470246],securityGroups=[sg-04ae1fe1a7935713f]}'
@@ -57,8 +57,7 @@ sed -i "s;%SHARED_SVCS_ACCOUNT_ID%;$shared_svcs_account_id;g" app-task-definitio
 sed -i "s;%CONTAINER_PORT%;5002;g" app-task-definition.json
 sed -i "s;%HOST_PORT%;5002;g" app-task-definition.json
 sed -i "s;%AWS_SECRET_MANAGER_ENABLED%;$AWS_SECRET_MANAGER_ENABLED;g" app-task-definition.json
-sed -i "s;%AWS_ARN_SECRET_MANAGER_DB%;$AWS_ARN_SECRET_MANAGER_DB;g" app-task-definition.json
-sed -i "s;%AWS_ARN_SECRET_MANAGER_APP%;$AWS_ARN_SECRET_MANAGER_APP;g" app-task-definition.json
+sed -i "s;%AWS_SECRET_MANAGER_ARN%;$AWS_SECRET_MANAGER_ARN;g" app-task-definition.json
 # COMMANDS to register task definitions 
 aws ecs register-task-definition --cli-input-json --profile $profile file://app-task-definition.json
 
