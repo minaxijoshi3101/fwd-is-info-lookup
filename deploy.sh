@@ -15,7 +15,7 @@ if [[ "$1" == "SIT" ]]; then
     elif [[ "$1" == "UAT" ]]; then
 elif [[ "$1" == "UAT" ]]; then
     targetGroupARN=arn:aws:elasticloadbalancing:ap-southeast-1:022525172765:targetgroup/fwd-is-info-lookup/a7c4eba721afa70c
-    networkConfig='awsvpcConfiguration={subnets=[subnet-0dadf4921a5da0251,subnet-0ebd7a195c050f2b8],securityGroups=[sg-0e24c8e15bfbc37a1]}'
+    networkConfig='awsvpcConfiguration={subnets=[subnet-0dadf4921a5da0251,subnet-0ebd7a195c050f2b8],securityGroups=[sg-0e59d8b8ba4af012a]}'
     AWS_SECRET_MANAGER_ENABLED=true
     AWS_ARN_SECRET_MANAGER_DB=arn:aws:secretsmanager:ap-southeast-1:022525172765:secret:UAT-SG-GI-IS-DB-0zumpK
     AWS_ARN_SECRET_MANAGER_APP=arn:aws:secretsmanager:ap-southeast-1:022525172765:secret:UAT-SG-GI-IS-INFOLOOKUP-rGNbqJ
