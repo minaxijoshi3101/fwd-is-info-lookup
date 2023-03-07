@@ -7,6 +7,7 @@ RUN mkdir -p /home/localfiles
 RUN ["chmod", "+x", "/usr/local/openjdk-11"]
 #CMD chmod -R 755 /usr/local/openjdk-11
 USER root
+ENV TZ="Asia/Singapore"
 CMD java -Xmx400m -Xms400m -jar %APP_NAME%-%VERSION%.jar
 # which port will be used , for example in server.xml connector port is 8085
 EXPOSE 5002
