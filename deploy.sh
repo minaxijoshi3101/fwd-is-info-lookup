@@ -23,7 +23,8 @@ elif [[ "$1" == "PRE-PROD" ]]; then
     targetGroupARN=arn:aws:elasticloadbalancing:ap-southeast-1:230108722688:targetgroup/fwd-is-info-lookup/0ad59f985638f66b
     networkConfig='awsvpcConfiguration={subnets=[subnet-08c2805b2d5c482f9,subnet-06649d60a6c470246],securityGroups=[sg-04ae1fe1a7935713f]}'
     AWS_SECRET_MANAGER_ENABLED=true
-    AWS_SECRET_MANAGER_ARN=arn:aws:secretsmanager:ap-southeast-1:230108722688:secret:pre-prod-fwd-is-info-lookup-LuN0uX
+    AWS_ARN_SECRET_MANAGER_DB=arn:aws:secretsmanager:ap-southeast-1:230108722688:secret:PRE-PROD-SG-GI-IS-DB-v4cxY1 
+    AWS_ARN_SECRET_MANAGER_APP=arn:aws:secretsmanager:ap-southeast-1:230108722688:secret:PRE-PROD-SG-GI-IS-INFOLOOKUP-5OnMtf
 elif [[ "$1" == "PROD" ]]; then
     targetGroupARN=arn:aws:elasticloadbalancing:ap-southeast-1:407264846976:targetgroup/fwd-is-info-lookup/d177a79ba7321025
     networkConfig='awsvpcConfiguration={subnets=[subnet-0a76aa27cf1c3b14f,subnet-0e621bfb0281f241e],securityGroups=[sg-09b09570e27b17ed6]}'
