@@ -10,6 +10,7 @@
 		<relativePath>parent.xml</relativePath>
 	</parent>
 	<artifactId>fwd-is-info-lookup</artifactId>
+	<groupId>com.fwd.is.info-lookup</groupId>
 	<name>fwd-is-info-lookup</name>
 	<version>1.0.2-SNAPSHOT</version>
 	<description>FWD Integration Service Info Lookup</description>
